@@ -1,10 +1,13 @@
 import streamlit as st
 import google.generativeai as genai
-from templates import TEMPLATES
 
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-model = genai.GenerativeModel("gemini-pro")
+try:
+    api_key = st.secrets["GEMINI_API_KEY"]
+except:
+    st.error("Missing API key. Add it in Streamlit secrets.")
+    st.stop()
 
+genai.configure(api_key=api_key)
 
 # -------- Intent Detection --------
 def detect_intent(prompt):
