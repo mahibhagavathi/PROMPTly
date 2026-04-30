@@ -22,7 +22,7 @@ html, body, [class*="css"] {
 
 /* Background */
 .stApp {
-    background: #0a0a0f;
+    background: #d3d3eb;
     color: #e8e6f0;
 }
 
