@@ -110,7 +110,12 @@ html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
 st.markdown("""
 <div class="hero">
     <div class="hero-logo">✦ PROMPTly</div>
-    <div class="hero-sub">Communicate better with AI — because the ouput is only as good as your prompt.</div>
+    <div class="hero-sub">
+        Communicate better with AI — because the output is only as good as your prompt.
+    </div>
+    <div class="hero-disclaimer" style="margin-top:10px; font-size:0.9em; opacity:0.8;">
+        ⚠️ This is not a chatbot. It is a prompt enhancement tool that helps you refine, structure, and improve your prompts for better AI outputs.
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
