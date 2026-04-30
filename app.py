@@ -42,7 +42,7 @@ html, body, [class*="css"] {
     font-weight: 800;
     font-size: 3rem;
     letter-spacing: -1px;
-    color: #05055e;
+    color: #fbff08;
     line-height: 1;
     margin-bottom: 0.4rem;
 }
