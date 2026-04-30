@@ -12,14 +12,26 @@ st.set_page_config(page_title="PROMPTly", layout="wide")
 st.title("⚡ PROMPTly")
 st.caption("AI Prompt Optimizer with Human-like Output")
 
-# -------- Session State --------
+# ---------------- SESSION STATE INIT ----------------
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# -------- Sidebar --------
+if "base_prompt" not in st.session_state:
+    st.session_state.base_prompt = ""
+
+if "questions" not in st.session_state:
+    st.session_state.questions = []
+
+if "answers" not in st.session_state:
+    st.session_state.answers = {}
+
+if "improved" not in st.session_state:
+    st.session_state.improved = ""
+
+# ---------------- SIDEBAR ----------------
 st.sidebar.title("📜 Prompt History")
 
 for i, item in enumerate(st.session_state.history):
@@ -27,18 +39,18 @@ for i, item in enumerate(st.session_state.history):
         st.sidebar.write("Original:", item["original"])
         st.sidebar.write("Improved:", item["improved"])
 
-# -------- Style --------
+# ---------------- STYLE ----------------
 style = st.selectbox(
     "Output Style",
     ["Formal", "Balanced", "Human & Conversational"]
 )
 
-# -------- Chat Display --------
+# ---------------- CHAT DISPLAY ----------------
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# -------- Input --------
+# ---------------- USER INPUT ----------------
 user_input = st.chat_input("Enter your prompt...")
 
 if user_input:
@@ -49,8 +61,8 @@ if user_input:
     st.session_state.questions = questions
     st.session_state.answers = {}
 
-# -------- Follow-ups --------
-if "questions" in st.session_state:
+# ---------------- FOLLOW-UP QUESTIONS ----------------
+if st.session_state.questions:
     st.subheader("Answer to improve your prompt")
 
     for q in st.session_state.questions:
@@ -58,30 +70,39 @@ if "questions" in st.session_state:
         if ans:
             st.session_state.answers[q] = ans
 
-# -------- Cheatcodes --------
+# ---------------- CHEATCODES ----------------
 st.subheader("⚡ Cheatcodes")
 
 c1, c2, c3 = st.columns(3)
 
+def warn_if_empty():
+    if not st.session_state.base_prompt:
+        st.warning("Enter a prompt first to apply cheatcodes")
+        return True
+    return False
+
 with c1:
     if st.button("Add Role"):
-        st.session_state.base_prompt = apply_cheatcode(
-            st.session_state.base_prompt, "role"
-        )
+        if not warn_if_empty():
+            st.session_state.base_prompt = apply_cheatcode(
+                st.session_state.base_prompt, "role"
+            )
 
 with c2:
     if st.button("Add Constraints"):
-        st.session_state.base_prompt = apply_cheatcode(
-            st.session_state.base_prompt, "constraints"
-        )
+        if not warn_if_empty():
+            st.session_state.base_prompt = apply_cheatcode(
+                st.session_state.base_prompt, "constraints"
+            )
 
 with c3:
     if st.button("Structure Output"):
-        st.session_state.base_prompt = apply_cheatcode(
-            st.session_state.base_prompt, "structure"
-        )
+        if not warn_if_empty():
+            st.session_state.base_prompt = apply_cheatcode(
+                st.session_state.base_prompt, "structure"
+            )
 
-# -------- Generate --------
+# ---------------- GENERATE PROMPT ----------------
 if st.button("Generate Optimized Prompt"):
 
     answers = list(st.session_state.answers.values())
@@ -106,8 +127,8 @@ if st.button("Generate Optimized Prompt"):
         "improved": improved
     })
 
-# -------- Results --------
-if "improved" in st.session_state:
+# ---------------- RESULTS ----------------
+if st.session_state.improved:
 
     col1, col2 = st.columns(2)
 
@@ -131,17 +152,19 @@ if "improved" in st.session_state:
         "prompt.txt"
     )
 
+    # ---------------- OUTPUT COMPARISON ----------------
     if st.button("Compare Outputs"):
 
-        orig = generate_output(st.session_state.base_prompt)
-        new = generate_output(st.session_state.improved)
+        with st.spinner("Generating outputs..."):
+            orig = generate_output(st.session_state.base_prompt)
+            new = generate_output(st.session_state.improved)
 
         c1, c2 = st.columns(2)
 
         with c1:
-            st.write("Original Output")
+            st.subheader("Original Output")
             st.write(orig)
 
         with c2:
-            st.write("Improved Output")
+            st.subheader("Improved Output")
             st.write(new)
