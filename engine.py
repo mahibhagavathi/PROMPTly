@@ -20,7 +20,7 @@ def generate_followups(prompt):
         {
             "key": "role",
             "question": "What role should the AI assume?",
-            "example": "e.g. Data Analyst, Consultant, Content Creator"
+            "example": "e.g. CEO, Data Analyst, Strategy Consultant, Tour Guide, Content Creator"
         },
         {
             "key": "goal",
