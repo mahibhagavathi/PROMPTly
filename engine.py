@@ -25,27 +25,27 @@ def generate_followups(prompt):
         {
             "key": "goal",
             "question": "What is the goal of this content?",
-            "example": "e.g. Educate, Persuade, Inspire action"
+            "example": "e.g. Get an interview call, Increase my followers, Understand a concept clearly, Drive more sales, Break down a complex problem"
         },
         {
             "key": "audience",
             "question": "Who is the target audience?",
-            "example": "e.g. Early-career professionals, Students, CTOs"
+            "example": "e.g. Hiring Manager, Early-career professionals, Students, CEOs, B2B Clients, Investors, Potential customers "
         },
         {
             "key": "tone",
             "question": "What tone should the content carry?",
-            "example": "e.g. Witty, Authoritative, Conversational, Empathetic"
+            "example": "e.g. Professional, Conversational, Witty, Creative, Authoritative, Empathetic, or a combination of tones"
         },
         {
             "key": "word_limit",
             "question": "Approximate word limit?",
-            "example": "e.g. 150, 300, 500"
+            "example": "e.g. 150, 300, 500, 1000, etc"
         },
         {
             "key": "context",
             "question": "Any extra context or constraints?",
-            "example": "e.g. Avoid jargon, include a stat, reference a real trend"
+            "example": "e.g. Avoid jargon, Include a stat, Use bullet points only, Make it suitable for beginners, Use a storytelling format "
         }
     ]
 
