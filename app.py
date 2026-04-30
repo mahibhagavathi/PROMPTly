@@ -161,7 +161,7 @@ if st.session_state.step == 1:
 
     user_input = st.text_area(
         "Your idea",
-        placeholder="e.g. Write a LinkedIn post on Agentic AI",
+        placeholder="e.g. Write a LinkedIn post on Agentic AI, Write a cold email for sales outreach, Build a study plan for learning SQL",
         height=110,
         label_visibility="collapsed",
     )
