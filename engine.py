@@ -50,6 +50,7 @@ FACTUALITY_MODES = {
             "- If information is missing or uncertain, say exactly: 'I don't know' or ask a "
             "  specific clarifying question. Never fill gaps with plausible-sounding guesses.\n"
             "- Do not invent citations, studies, or experts.\n"
+            "- Include relevant sources with citations and provide links where available to support the response.\n"
             "- Precision and honesty are more important than sounding confident or complete."
         ),
     },
