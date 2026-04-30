@@ -17,8 +17,3 @@ PROMPTly is an AI-powered prompt engineering assistant that transforms vague pro
 
 - Streamlit
 - Gemini API
-
-## Setup
-
-1. Clone repo
-2. Add API key in `.streamlit/secrets.toml`
