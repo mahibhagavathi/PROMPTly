@@ -23,7 +23,7 @@ html, body, [class*="css"] {
 /* Background */
 .stApp {
     background: #d3d3eb;
-    color: #e8e6f0;
+    color: #05055e;
 }
 
 /* Hide Streamlit chrome */
