@@ -110,7 +110,7 @@ html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
 st.markdown("""
 <div class="hero">
     <div class="hero-logo">✦ PROMPTly</div>
-    <div class="hero-sub">Communicate better with AI — because it's only as good as your prompt.</div>
+    <div class="hero-sub">Communicate better with AI — because the ouput is only as good as your prompt.</div>
 </div>
 """, unsafe_allow_html=True)
 
