@@ -42,7 +42,7 @@ html, body, [class*="css"] {
     font-weight: 800;
     font-size: 3rem;
     letter-spacing: -1px;
-    color: #fbff08;
+    color: #030936;
     line-height: 1;
     margin-bottom: 0.4rem;
 }
@@ -73,7 +73,7 @@ html, body, [class*="css"] {
 .step-label {
     font-family: 'Syne', sans-serif;
     font-size: 0.7rem;
-    color: #6b6880;
+    color: #ebe8ff;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0 0.3rem;
