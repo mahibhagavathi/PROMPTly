@@ -5,6 +5,8 @@
 PROMPTly is an AI-powered prompt engineering tool that turns rough ideas into production-ready prompts through a guided conversation.  
 Instead of writing prompts manually, you describe what you want — PROMPTly does the structuring, refinement, and optimization for you.
 
+Link: https://promptly-ai.streamlit.app/
+
 ---
 
 ## 🧠 Tech Stack
