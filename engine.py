@@ -2,7 +2,7 @@ import google.generativeai as genai
 import streamlit as st
 
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 # ---------------- CLEAN INPUT ----------------
 def clean_input(text: str):
