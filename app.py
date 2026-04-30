@@ -48,7 +48,7 @@ html, body, [class*="css"] {
 }
 .hero-sub {
     font-size: 0.92rem;
-    color: #6b6880;
+    color: #05055e;
     font-style: italic;
     font-weight: 300;
     letter-spacing: 0.01em;
