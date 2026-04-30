@@ -1,116 +1,139 @@
-import streamlit as st
 import google.generativeai as genai
-from templates import TEMPLATES
+import streamlit as st
 
-# -------- API SETUP --------
-try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-except Exception:
-    st.error("🚨 API Key missing. Add it in Streamlit secrets.")
-    st.stop()
-
-genai.configure(api_key=api_key)
-
-# ✅ MODEL INIT
-model = genai.GenerativeModel("gemini-1.5-flash")
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-pro")
 
 
-# -------- INTENT DETECTION --------
-def detect_intent(prompt):
-    p = prompt.lower()
-    if any(x in p for x in ["code", "sql", "debug"]):
-        return "technical"
-    elif any(x in p for x in ["write", "post", "content", "blog"]):
-        return "content"
-    else:
-        return "general"
-
-
-# -------- FOLLOW-UP QUESTIONS --------
-def generate_followups(prompt):
-    try:
-        response = model.generate_content(f"""
-        You are an expert in prompt engineering.
-
-        A user gave this prompt:
-        "{prompt}"
-
-        Ask 3 short follow-up questions to improve it.
-
-        Focus on:
-        - Goal
-        - Audience
-        - Constraints
-
-        Return only questions. One per line.
-        """)
-
-        text = getattr(response, "text", "")
-
-        questions = [
-            q.strip("- ").strip()
-            for q in text.split("\n")
-            if q.strip()
-        ]
-
-        return questions[:3]
-
-    except Exception as e:
-        print("Error:", e)
-        return [
-            "What is the goal?",
-            "Who is the audience?",
-            "Any constraints (word limit, tone, format)?"
-        ]
-
-
-# -------- STYLE --------
-def get_style_block(style):
-    if style == "Human & Conversational":
-        return """
-Style Instructions:
-- Write like a human
-- Avoid generic phrases
-- Use natural tone
-"""
-    elif style == "Balanced":
-        return "Keep a clear and semi-formal tone."
-    else:
+# ---------------- CLEAN INPUT ----------------
+def clean_input(text: str):
+    if not text:
         return ""
 
+    text = text.lower().strip()
 
-# -------- PROMPT BUILDER --------
+    banned = [
+        "fuck", "shit", "idc", "idk",
+        "whatever", "none", "na", "n/a"
+    ]
+
+    if any(word in text for word in banned) or len(text) < 3:
+        return ""
+
+    return text
+
+
+# ---------------- FOLLOW-UP QUESTIONS ----------------
+def generate_followups(prompt):
+    return [
+        {
+            "key": "role",
+            "question": "What role should the AI assume?",
+            "example": "e.g. Data Analyst, Consultant, Content Creator"
+        },
+        {
+            "key": "goal",
+            "question": "What is the goal?",
+            "example": "e.g. Educate, Persuade, Inform"
+        },
+        {
+            "key": "audience",
+            "question": "Who is the audience?",
+            "example": "e.g. Beginners, Professionals, Students"
+        },
+        {
+            "key": "tone",
+            "question": "Preferred tone?",
+            "example": "e.g. Engaging, Professional, Casual"
+        },
+        {
+            "key": "word_limit",
+            "question": "Word limit?",
+            "example": "e.g. 100, 200, 500"
+        }
+    ]
+
+
+# ---------------- STYLE BLOCK ----------------
+def get_style_block(style):
+    if style == "Human":
+        return "Write in a natural, human-like, non-generic tone."
+    elif style == "Persuasive":
+        return "Make it persuasive and impactful."
+    elif style == "Analytical":
+        return "Focus on structured, logical, insight-driven output."
+    return ""
+
+
+# ---------------- BUILD PROMPT ----------------
 def build_prompt(user_prompt, answers, style):
+    role = answers.get("role", "") or "expert in the subject"
+    goal = answers.get("goal", "") or "provide valuable insights"
+    audience = answers.get("audience", "") or "professionals"
+    tone = answers.get("tone", "") or "engaging"
+    word_limit = answers.get("word_limit", "") or "150"
 
-    intent = detect_intent(user_prompt)
-    template = TEMPLATES.get(intent, TEMPLATES["general"])
+    style_block = get_style_block(style)
 
-    filled = {
-        "role": answers.get("role", "expert"),
-        "task": user_prompt,
-        "goal": answers.get("goal", "inform"),
-        "audience": answers.get("audience", "general audience"),
-        "tone": answers.get("tone", "professional"),
-        "word_limit": answers.get("word_limit", "150"),
-        "constraints": answers.get("constraints", "Keep it clear"),
-        "style_block": get_style_block(style)
-    }
+    response = model.generate_content(f"""
+You are an expert prompt engineer.
 
-    return template.format(**filled)
+User input:
+"{user_prompt}"
+
+Context:
+Role: {role}
+Goal: {goal}
+Audience: {audience}
+Tone: {tone}
+Word limit: {word_limit}
+
+CRITICAL RULES:
+- Ignore bad, abusive, or irrelevant inputs
+- Improve vague inputs intelligently
+- Expand role into domain expertise:
+    Consultant → insights, trends, strategy
+    Content Creator → storytelling, hooks, engagement
+    Analyst → structured insights, data thinking
+
+Create a HIGH-QUALITY prompt.
+
+Format:
+
+Act as a [refined role].
+
+Task:
+[clear rewritten task]
+
+Goal:
+[improved goal]
+
+Audience:
+[refined audience]
+
+Instructions:
+- Add depth based on role
+- Include examples if relevant
+- Ensure clarity and usefulness
+
+Output Format:
+- Hook
+- Body
+- Key insight
+- CTA
+
+Constraints:
+- {word_limit} words
+- Tone: {tone}
+- Clear and engaging
+
+{style_block}
+""")
+
+    return response.text
 
 
-# -------- OUTPUT --------
+# ---------------- GENERATE OUTPUT ----------------
 def generate_output(prompt):
     response = model.generate_content(prompt)
-    return getattr(response, "text", "")
-
-
-# -------- CHEATCODES --------
-def apply_cheatcode(prompt, code):
-    if code == "role":
-        return prompt + "\nAct as an expert."
-    elif code == "constraints":
-        return prompt + "\nKeep it concise and structured."
-    elif code == "structure":
-        return prompt + "\nGive output in bullet points."
-    return prompt
+    return response.text
