@@ -1,26 +1,21 @@
-import google.generativeai as genai
+from groq import Groq
 import streamlit as st
 
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-model = genai.GenerativeModel("gemini-2.0-flash-lite")
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+MODEL = "llama-3.3-70b-versatile"
 
 # ---------------- CLEAN INPUT ----------------
 def clean_input(text: str):
     if not text:
         return ""
-
     text = text.lower().strip()
-
     banned = [
         "fuck", "shit", "idc", "idk",
         "whatever", "none", "na", "n/a"
     ]
-
     if any(word in text for word in banned) or len(text) < 3:
         return ""
-
     return text
-
 
 # ---------------- FOLLOW-UP QUESTIONS ----------------
 def generate_followups(prompt):
@@ -52,7 +47,6 @@ def generate_followups(prompt):
         }
     ]
 
-
 # ---------------- STYLE BLOCK ----------------
 def get_style_block(style):
     if style == "Human":
@@ -63,30 +57,34 @@ def get_style_block(style):
         return "Focus on structured, logical, insight-driven output."
     return ""
 
+# ---------------- GROQ HELPER ----------------
+def groq_generate(prompt: str) -> str:
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1024,
+    )
+    return response.choices[0].message.content
 
 # ---------------- BUILD PROMPT ----------------
 def build_prompt(user_prompt, answers, style):
-    role = answers.get("role", "") or "expert in the subject"
-    goal = answers.get("goal", "") or "provide valuable insights"
-    audience = answers.get("audience", "") or "professionals"
-    tone = answers.get("tone", "") or "engaging"
+    role       = answers.get("role", "")       or "expert in the subject"
+    goal       = answers.get("goal", "")       or "provide valuable insights"
+    audience   = answers.get("audience", "")   or "professionals"
+    tone       = answers.get("tone", "")       or "engaging"
     word_limit = answers.get("word_limit", "") or "150"
-
     style_block = get_style_block(style)
 
-    response = model.generate_content(f"""
+    return groq_generate(f"""
 You are an expert prompt engineer.
-
 User input:
 "{user_prompt}"
-
 Context:
 Role: {role}
 Goal: {goal}
 Audience: {audience}
 Tone: {tone}
 Word limit: {word_limit}
-
 CRITICAL RULES:
 - Ignore bad, abusive, or irrelevant inputs
 - Improve vague inputs intelligently
@@ -94,45 +92,31 @@ CRITICAL RULES:
     Consultant → insights, trends, strategy
     Content Creator → storytelling, hooks, engagement
     Analyst → structured insights, data thinking
-
 Create a HIGH-QUALITY prompt.
-
 Format:
-
 Act as a [refined role].
-
 Task:
 [clear rewritten task]
-
 Goal:
 [improved goal]
-
 Audience:
 [refined audience]
-
 Instructions:
 - Add depth based on role
 - Include examples if relevant
 - Ensure clarity and usefulness
-
 Output Format:
 - Hook
 - Body
 - Key insight
 - CTA
-
 Constraints:
 - {word_limit} words
 - Tone: {tone}
 - Clear and engaging
-
 {style_block}
 """)
 
-    return response.text
-
-
 # ---------------- GENERATE OUTPUT ----------------
 def generate_output(prompt):
-    response = model.generate_content(prompt)
-    return response.text
+    return groq_generate(prompt)
