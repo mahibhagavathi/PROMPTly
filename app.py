@@ -12,7 +12,7 @@ st.set_page_config(page_title="PROMPTly", layout="wide")
 st.title("⚡ PROMPTly")
 st.caption("Turn vague prompts into powerful ones")
 
-# ---------------- SESSION STATE ----------------
+# ---------------- SESSION STATE INIT ----------------
 if "base_prompt" not in st.session_state:
     st.session_state.base_prompt = ""
 
@@ -25,7 +25,7 @@ if "answers" not in st.session_state:
 if "improved" not in st.session_state:
     st.session_state.improved = ""
 
-# ---------------- STEP 1: USER INPUT ----------------
+# ---------------- STEP 1: INPUT ----------------
 st.subheader("Step 1: Enter your prompt")
 
 user_input = st.text_area(
@@ -38,6 +38,7 @@ if st.button("Next ➡️"):
         st.session_state.base_prompt = user_input
         st.session_state.questions = generate_followups(user_input)
         st.session_state.answers = {}
+        st.session_state.improved = ""
     else:
         st.warning("Please enter a prompt first")
 
@@ -48,7 +49,6 @@ if st.session_state.questions:
 
     st.markdown("Answer a few questions to make your prompt stronger 👇")
 
-    # Example helper text
     st.info("""
 **Examples:**
 - **Role:** Data Analyst, Content Creator, Product Manager  
@@ -63,7 +63,9 @@ if st.session_state.questions:
         if ans:
             st.session_state.answers[q] = ans
 
-# ---------------- STYLE ----------------
+# ---------------- STEP 3: STYLE ----------------
+style = "Balanced"
+
 if st.session_state.base_prompt:
     st.subheader("Step 3: Choose output style")
 
@@ -72,32 +74,41 @@ if st.session_state.base_prompt:
         ["Formal", "Balanced", "Human & Conversational"]
     )
 
-# ---------------- CHEATCODES ----------------
+# ---------------- STEP 4: CHEATCODES ----------------
 if st.session_state.base_prompt:
 
     st.subheader("⚡ Optional Boosts (Cheatcodes)")
 
     c1, c2, c3 = st.columns(3)
 
+    def warn_if_empty():
+        if not st.session_state.base_prompt:
+            st.warning("Enter a prompt first")
+            return True
+        return False
+
     with c1:
         if st.button("Add Role"):
-            st.session_state.base_prompt = apply_cheatcode(
-                st.session_state.base_prompt, "role"
-            )
+            if not warn_if_empty():
+                st.session_state.base_prompt = apply_cheatcode(
+                    st.session_state.base_prompt, "role"
+                )
 
     with c2:
         if st.button("Add Constraints"):
-            st.session_state.base_prompt = apply_cheatcode(
-                st.session_state.base_prompt, "constraints"
-            )
+            if not warn_if_empty():
+                st.session_state.base_prompt = apply_cheatcode(
+                    st.session_state.base_prompt, "constraints"
+                )
 
     with c3:
         if st.button("Structure Output"):
-            st.session_state.base_prompt = apply_cheatcode(
-                st.session_state.base_prompt, "structure"
-            )
+            if not warn_if_empty():
+                st.session_state.base_prompt = apply_cheatcode(
+                    st.session_state.base_prompt, "structure"
+                )
 
-# ---------------- GENERATE ----------------
+# ---------------- STEP 5: GENERATE ----------------
 if st.session_state.base_prompt:
 
     if st.button("🚀 Generate Optimized Prompt"):
@@ -146,7 +157,7 @@ if st.session_state.improved:
         "prompt.txt"
     )
 
-    # Compare outputs
+    # ---------------- COMPARE OUTPUTS ----------------
     if st.button("Compare Outputs"):
 
         with st.spinner("Generating outputs..."):
