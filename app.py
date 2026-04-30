@@ -14,7 +14,7 @@ st.set_page_config(page_title="PROMPTly", page_icon="✦", layout="centered")
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
@@ -22,8 +22,8 @@ html, body, [class*="css"] {
 
 /* Background */
 .stApp {
-    background: #d3d3eb;
-    color: #05055e;
+    background: #f5f6fa;
+    color: #1f2a44;
 }
 
 /* Hide Streamlit chrome */
@@ -34,24 +34,19 @@ html, body, [class*="css"] {
 .hero {
     text-align: center;
     padding: 2.5rem 0 1.5rem;
-    border-bottom: 1px solid #1e1e2e;
+    border-bottom: 1px solid #e5e7eb;
     margin-bottom: 2.5rem;
 }
 .hero-logo {
     font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 3rem;
-    letter-spacing: -1px;
-    color: #030936;
-    line-height: 1;
-    margin-bottom: 0.4rem;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #1f2a44;
 }
 .hero-sub {
-    font-size: 0.92rem;
-    color: #05055e;
+    font-size: 0.95rem;
+    color: #6b7280;
     font-style: italic;
-    font-weight: 300;
-    letter-spacing: 0.01em;
 }
 
 /* ── Step indicator ── */
@@ -65,139 +60,93 @@ html, body, [class*="css"] {
 .step-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: #2a2a3a;
-    transition: background 0.3s;
+    background: #d1d5db;
 }
-.step-dot.active { background: #f0ee9e; }
-.step-dot.done   { background: #6b6880; }
+.step-dot.active { background: #a78bfa; }
+.step-dot.done   { background: #2f3a5f; }
+
 .step-label {
     font-family: 'Syne', sans-serif;
     font-size: 0.7rem;
-    color: #ebe8ff;
+    color: #6b7280;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin: 0 0.3rem;
 }
 
 /* ── Section heading ── */
 .section-heading {
     font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1.35rem;
-    color: #f0ee9e;
-    margin-bottom: 0.3rem;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #2f3a5f;
 }
 .section-sub {
     font-size: 0.85rem;
-    color: #6b6880;
-    margin-bottom: 1.6rem;
+    color: #6b7280;
 }
 
 /* ── Inputs ── */
 .stTextArea textarea, .stTextInput input {
-    background: #12121c !important;
-    border: 1px solid #2a2a3a !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 10px !important;
-    color: #e8e6f0 !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 0.92rem !important;
-    padding: 0.75rem 1rem !important;
-    transition: border-color 0.2s !important;
+    color: #1f2a44 !important;
 }
 .stTextArea textarea:focus, .stTextInput input:focus {
-    border-color: #f0ee9e !important;
-    box-shadow: 0 0 0 2px rgba(240,238,158,0.08) !important;
+    border-color: #a78bfa !important;
+    box-shadow: 0 0 0 2px rgba(167,139,250,0.15) !important;
 }
 
 /* ── Select box ── */
 .stSelectbox > div > div {
-    background: #12121c !important;
-    border: 1px solid #2a2a3a !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 10px !important;
-    color: #e8e6f0 !important;
+    color: #1f2a44 !important;
 }
 
 /* ── Primary button ── */
 .stButton > button {
-    background: #f0ee9e !important;
-    color: #0a0a0f !important;
-    border: none !important;
+    background: #2f3a5f !important;
+    color: #ffffff !important;
     border-radius: 8px !important;
     font-family: 'Syne', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 0.88rem !important;
-    letter-spacing: 0.04em !important;
-    padding: 0.6rem 1.6rem !important;
-    transition: opacity 0.2s, transform 0.15s !important;
+    font-weight: 600 !important;
 }
 .stButton > button:hover {
-    opacity: 0.88 !important;
-    transform: translateY(-1px) !important;
+    background: #1f2a44 !important;
 }
 
-/* ── Prompt output card ── */
-.prompt-card {
-    background: #12121c;
-    border: 1px solid #2a2a3a;
+/* ── Cards ── */
+.prompt-card, .output-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
-    padding: 1.5rem 1.75rem;
-    font-size: 0.88rem;
-    line-height: 1.75;
-    color: #ccc9e0;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    color: #374151;
 }
 
-/* ── Output card ── */
-.output-card {
-    background: #0e1a14;
-    border: 1px solid #1e3328;
-    border-radius: 12px;
-    padding: 1.5rem 1.75rem;
-    font-size: 0.92rem;
-    line-height: 1.8;
-    color: #c9e0d0;
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin-top: 1rem;
-}
-
-/* ── Finetune pills ── */
-.pill-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0 1.5rem;
-}
-
-/* ── Tag chip ── */
+/* ── Tags ── */
 .tag {
-    display: inline-block;
-    background: #1e1e2e;
-    border: 1px solid #2a2a3a;
+    background: #f1f5f9;
+    border: 1px solid #e5e7eb;
     border-radius: 999px;
     padding: 0.25rem 0.75rem;
-    font-size: 0.78rem;
-    color: #6b6880;
-    margin-right: 0.3rem;
+    font-size: 0.75rem;
+    color: #6b7280;
 }
 
 /* ── Divider ── */
 .thin-divider {
-    border: none;
-    border-top: 1px solid #1e1e2e;
-    margin: 2rem 0;
+    border-top: 1px solid #e5e7eb;
 }
 
 /* ── Labels ── */
 .stTextArea label, .stTextInput label, .stSelectbox label {
     font-family: 'Syne', sans-serif !important;
-    font-size: 0.78rem !important;
+    font-size: 0.75rem !important;
     font-weight: 600 !important;
-    color: #6b6880 !important;
+    color: #6b7280 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
 }
 </style>
 """, unsafe_allow_html=True)
