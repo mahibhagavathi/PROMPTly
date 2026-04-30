@@ -30,12 +30,12 @@ def generate_followups(prompt):
         {
             "key": "audience",
             "question": "Who is the target audience?",
-            "example": "e.g. Hiring Manager, Early-career professionals, Students, CEOs, B2B Clients, Investors, Potential customers "
+            "example": "e.g. Hiring Manager, Students, CEOs, Potential customers "
         },
         {
             "key": "tone",
             "question": "What tone should the content carry?",
-            "example": "e.g. Professional, Conversational, Witty, Creative, Authoritative, Empathetic, or a combination of tones"
+            "example": "e.g. Professional, Conversational, Witty, Creative, or a combination of tones"
         },
         {
             "key": "word_limit",
@@ -45,7 +45,7 @@ def generate_followups(prompt):
         {
             "key": "context",
             "question": "Any extra context or constraints?",
-            "example": "e.g. Avoid jargon, Include a stat, Use bullet points only, Make it suitable for beginners, Use a storytelling format "
+            "example": "e.g. Avoid jargon, Include a stat, Use bullet points only"
         }
     ]
 
