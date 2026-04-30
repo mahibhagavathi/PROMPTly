@@ -25,7 +25,7 @@ def generate_followups(prompt):
         {
             "key": "goal",
             "question": "What is the goal of this content?",
-            "example": "e.g. Get an interview call, Increase my followers, Understand a concept clearly, Drive more sales, Break down a complex problem"
+            "example": "e.g. Get an interview call, Increase my followers, Drive more sales"
         },
         {
             "key": "audience",
