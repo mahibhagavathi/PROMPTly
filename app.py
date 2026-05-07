@@ -402,4 +402,4 @@ elif st.session_state.step == 4:
         if st.button("↩ Start Over", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
-            st.rerun(
+            st.rerun()
