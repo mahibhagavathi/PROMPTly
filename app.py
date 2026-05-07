@@ -404,4 +404,4 @@ elif st.session_state.step == 4:
                 del st.session_state[key]
             st.rerun()
 
-st.markdown('<div class="voc-footer">vocAI · Powered by Groq &amp; LLaMA 3.3 · Prompt Enrichment Tool built by Mahitha Bhagavathi </div>', unsafe_allow_html=True)
+st.markdown('<div class="voc-footer">Promptly · Powered by Groq &amp; LLaMA 3.3 · Prompt Enrichment Tool built by Mahitha Bhagavathi </div>', unsafe_allow_html=True)
